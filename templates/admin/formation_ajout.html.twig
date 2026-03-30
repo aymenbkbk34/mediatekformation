@@ -1,0 +1,66 @@
+{% extends "baseadmin.html.twig" %}
+{% block body %}
+    <h4 class="text-info mt-3">
+        {% if formation.id %}
+            Modifier la formation
+        {% else %}
+            Ajouter une formation
+        {% endif %}
+    </h4>
+    <form method="POST">
+        <div class="mb-3">
+            <label for="title" class="form-label">Titre *</label>
+            <input type="text" class="form-control" id="title" name="title" 
+                   value="{{ formation.title }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" id="description" name="description" rows="3">{{ formation.description }}</textarea>
+        </div>
+        <div class="mb-3">
+            <label for="videoId" class="form-label">Video ID (YouTube) *</label>
+            <input type="text" class="form-control" id="videoId" name="videoId" 
+                   value="{{ formation.videoId }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="publishedAt" class="form-label">Date de parution *</label>
+            <input type="date" class="form-control" id="publishedAt" name="publishedAt"
+                   max="{{ "now"|date("Y-m-d") }}"
+                   value="{{ formation.publishedAt ? formation.publishedAt|date('Y-m-d') : '' }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="playlist" class="form-label">Playlist *</label>
+            <select class="form-select" id="playlist" name="playlist" required>
+                <option value=""></option>
+                {% for playlist in playlists %}
+                    <option value="{{ playlist.id }}"
+                        {% if formation.playlist and formation.playlist.id == playlist.id %}
+                            selected
+                        {% endif %}>
+                        {{ playlist.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Catégories</label>
+            {% for categorie in categories %}
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" 
+                           name="categories[]" 
+                           value="{{ categorie.id }}"
+                           id="cat{{ categorie.id }}"
+                           {% if formation.categories.contains(categorie) %}
+                               checked
+                           {% endif %}>
+                    <label class="form-check-label" for="cat{{ categorie.id }}">
+                        {{ categorie.name }}
+                    </label>
+                </div>
+            {% endfor %}
+        </div>
+        <input type="hidden" name="_token" value="{{ csrf_token('formation_ajout') }}">
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+        <a href="{{ path('admin.formations') }}" class="btn btn-secondary">Annuler</a>
+    </form>
+{% endblock %}
