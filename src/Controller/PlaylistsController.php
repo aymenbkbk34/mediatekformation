@@ -1,6 +1,5 @@
 <?php
 namespace App\Controller;
-
 use App\Repository\CategorieRepository;
 use App\Repository\FormationRepository;
 use App\Repository\PlaylistRepository;
@@ -8,7 +7,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
 /**
  * Description of PlaylistsController
  *
@@ -17,19 +15,16 @@ use Symfony\Component\Routing\Annotation\Route;
 class PlaylistsController extends AbstractController {
     
     /**
-     * 
      * @var PlaylistRepository
      */
     private $playlistRepository;
     
     /**
-     * 
      * @var FormationRepository
      */
     private $formationRepository;
     
     /**
-     * 
      * @var CategorieRepository
      */
     private $categorieRepository;    
@@ -41,7 +36,6 @@ class PlaylistsController extends AbstractController {
         $this->categorieRepository = $categorieRepository;
         $this->formationRepository = $formationRespository;
     }
-    
     
     #[Route('/playlists', name: 'playlists')]
     public function index(): Response{
@@ -56,8 +50,10 @@ class PlaylistsController extends AbstractController {
     #[Route('/playlists/tri/{champ}/{ordre}', name: 'playlists.sort')]
     public function sort($champ, $ordre): Response{
         if($champ == "name"){
-    $playlists = $this->playlistRepository->findAllOrderByName($ordre);
-}
+            $playlists = $this->playlistRepository->findAllOrderByName($ordre);
+        }else{
+            $playlists = $this->playlistRepository->findAllOrderByNbFormations($ordre);
+        }
         $categories = $this->categorieRepository->findAll();
         return $this->render("pages/playlists.html.twig", [
             'playlists' => $playlists,

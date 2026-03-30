@@ -1,28 +1,23 @@
 <?php
 namespace App\Controller;
-
 use App\Repository\CategorieRepository;
 use App\Repository\FormationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
 /**
  * Controleur des formations
  *
  * @author emds
  */
 class FormationsController extends AbstractController {
-
     /**
-     * 
      * @var FormationRepository
      */
     private $formationRepository;
     
     /**
-     * 
      * @var CategorieRepository
      */
     private $categorieRepository;
@@ -41,7 +36,6 @@ class FormationsController extends AbstractController {
             'categories' => $categories
         ]);
     }
-
     #[Route('/formations/tri/{champ}/{ordre}/{table}', name: 'formations.sort')]
     public function sort($champ, $ordre, $table=""): Response{
         $formations = $this->formationRepository->findAllOrderBy($champ, $ordre, $table);
@@ -51,7 +45,6 @@ class FormationsController extends AbstractController {
             'categories' => $categories
         ]);
     }     
-
     #[Route('/formations/recherche/{champ}/{table}', name: 'formations.findallcontain')]
     public function findAllContain($champ, Request $request, $table=""): Response{
         $valeur = $request->get("recherche");
@@ -64,7 +57,6 @@ class FormationsController extends AbstractController {
             'table' => $table
         ]);
     }  
-
     #[Route('/formations/formation/{id}', name: 'formations.showone')]
     public function showOne($id): Response{
         $formation = $this->formationRepository->find($id);
