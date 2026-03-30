@@ -1,0 +1,34 @@
+{% extends "baseadmin.html.twig" %}
+{% block body %}
+    <h4 class="text-info mt-3">
+        {% if playlist.id %}
+            Modifier la playlist
+        {% else %}
+            Ajouter une playlist
+        {% endif %}
+    </h4>
+    <form method="POST">
+        <div class="mb-3">
+            <label for="name" class="form-label">Nom *</label>
+            <input type="text" class="form-control" id="name" name="name"
+                   value="{{ playlist.name }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" id="description" name="description" rows="3">{{ playlist.description }}</textarea>
+        </div>
+        {% if formations|length > 0 %}
+            <div class="mb-3">
+                <label class="form-label">Formations de cette playlist</label>
+                <ul class="list-group">
+                    {% for formation in formations %}
+                        <li class="list-group-item">{{ formation.title }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+        <input type="hidden" name="_token" value="{{ csrf_token('playlist_ajout') }}">
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+        <a href="{{ path('admin.playlists') }}" class="btn btn-secondary">Annuler</a>
+    </form>
+{% endblock %}
